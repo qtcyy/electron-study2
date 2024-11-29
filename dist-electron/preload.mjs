@@ -31,5 +31,11 @@ electron.contextBridge.exposeInMainWorld("electron", {
     };
     electron.ipcRenderer.on("file-watcher", handleUpdate);
   }),
-  closeWatch: () => electron.ipcRenderer.invoke("close-watch")
+  closeWatch: () => electron.ipcRenderer.invoke("close-watch"),
+  handleFileOpen: (filename) => {
+    return electron.ipcRenderer.invoke("file-open", filename);
+  },
+  handleFileUpload: (filename) => {
+    return electron.ipcRenderer.invoke("file-upload", filename);
+  }
 });

@@ -38,4 +38,12 @@ contextBridge.exposeInMainWorld("electron", {
     }),
 
   closeWatch: () => ipcRenderer.invoke("close-watch"),
+
+  handleFileOpen: (filename: string) => {
+    return ipcRenderer.invoke("file-open", filename);
+  },
+
+  handleFileUpload: (filename: string) => {
+    return ipcRenderer.invoke("file-upload", filename);
+  },
 });

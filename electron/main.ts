@@ -1,11 +1,15 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import path from "node:path";
+import path, { resolve } from "node:path";
 import { FoldWatcher } from "./service/foldwatcher";
+import { fileOpen } from "./service/fileopen";
+import { FileUpload } from "./service/fileupload";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const watchPath: string = "/Users/chengyiyang/Desktop/文档文件/test-watch/";
 
 // The built directory structure
 //
@@ -51,10 +55,7 @@ function createWindow() {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
 
-  const foldWatcher = new FoldWatcher(
-    "/Users/chengyiyang/Desktop/文档文件/test-watch/",
-    win
-  );
+  const foldWatcher = new FoldWatcher(watchPath, win);
 
   foldWatcher.startWatch();
 
@@ -74,6 +75,27 @@ function createWindow() {
       };
 
       ipcMain.on("file-watcher", handleUpdate);
+    });
+  });
+
+  ipcMain.handle("file-open", (_, filename) => {
+    return new Promise((resolve, reject) => {
+      console.log(filename);
+      try {
+        fileOpen(watchPath, filename);
+        resolve(true);
+      } catch (error) {
+        reject(false);
+      }
+    });
+  });
+
+  const fileUpload = new FileUpload("my-url", watchPath);
+
+  ipcMain.handle("file-upload", (_, filename) => {
+    return new Promise(() => {
+      console.log(filename);
+      fileUpload.upload(filename);
     });
   });
 }

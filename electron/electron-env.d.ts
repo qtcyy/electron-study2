@@ -27,6 +27,10 @@ interface IElectronAPI {
   onFileUpdate: () => Promise<{ filenames: string[] }>;
 
   closeWatch: () => void;
+
+  handleFileOpen: (filename: string) => Promise<string>;
+
+  handleFileUpload: (filename: string) => Promise;
 }
 
 // Used in Renderer process, expose in `preload.ts`

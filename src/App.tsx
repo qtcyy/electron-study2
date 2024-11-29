@@ -30,6 +30,22 @@ function App() {
     };
   }, []);
 
+  const handleOpenFile = async (filename: string) => {
+    try {
+      await window.electron.handleFileOpen(filename);
+    } catch (error) {
+      console.error("打开文件错误: ", error);
+    }
+  };
+
+  const handleUpload = async (filename: string) => {
+    try {
+      await window.electron.handleFileUpload(filename);
+    } catch (error) {
+      console.error("上传错误: ", error);
+    }
+  };
+
   return (
     <div>
       <div>当前文件夹: </div>
@@ -38,6 +54,8 @@ function App() {
         {files.map((file, index) => (
           <li key={index}>
             <span>{file}</span>
+            <button onClick={() => handleOpenFile(file)}>Open</button>
+            <button onClick={() => handleUpload(file)}>upload</button>
           </li>
         ))}
       </ul>
