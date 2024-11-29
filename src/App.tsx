@@ -1,17 +1,5 @@
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    electron: {
-      getInitFiles: () => Promise<{ filenames: string[] }>;
-
-      onFileUpdate: () => Promise<{ filenames: string[] }>;
-
-      closeWatch: () => void;
-    };
-  }
-}
-
 function App() {
   const [files, setFiles] = useState<string[]>([]);
 
